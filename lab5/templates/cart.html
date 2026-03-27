@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Корзина{% endblock %}
+{% block content %}
+<h1>🛒 Корзина</h1>
+{% if items %}
+<table class="cart-table">
+    <thead>
+        <tr>
+            <th>Товар</th>
+            <th>Цена</th>
+            <th>Количество</th>
+            <th>Сумма</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td><a href="/product/{{ item.product_id }}">{{ item.name }}</a></td>
+            <td>{{ "%.0f"|format(item.price) }} ₽</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ "%.0f"|format(item.subtotal) }} ₽</td>
+            <td>
+                <form method="post" action="/cart/remove/{{ item.cart_id }}">
+                    <button type="submit" class="btn-remove">✕</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3"><strong>Итого:</strong></td>
+            <td><strong>{{ "%.0f"|format(total) }} ₽</strong></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+<a href="/checkout" class="btn-primary">Оформить заказ</a>
+<a href="/catalog" class="btn-secondary">Продолжить покупки</a>
+{% else %}
+<p>Корзина пуста. <a href="/catalog">Перейти в каталог</a></p>
+{% endif %}
+{% endblock %}

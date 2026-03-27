@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}TechShop — Главная{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Добро пожаловать в TechShop!</h1>
+    <p>Лучшая электроника по доступным ценам</p>
+</section>
+
+<section>
+    <h2>Категории</h2>
+    <div class="categories-grid">
+        {% for cat in categories %}
+        <a href="/catalog/{{ cat.id }}" class="category-card">
+            <h3>{{ cat.name }}</h3>
+            <p>{{ cat.description }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2>🔥 Товары со скидкой</h2>
+    <div class="products-grid">
+        {% for p in sales %}
+        <div class="product-card sale">
+            <div class="badge">Скидка!</div>
+            <h3><a href="/product/{{ p.id }}">{{ p.name }}</a></h3>
+            <p class="description">{{ p.description[:80] }}...</p>
+            <div class="price">
+                <span class="old-price">{{ "%.0f"|format(p.old_price) }} ₽</span>
+                <span class="current-price">{{ "%.0f"|format(p.price) }} ₽</span>
+            </div>
+            <div class="rating">⭐ {{ p.rating }} ({{ p.reviews_count }} отзывов)</div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2>⭐ Популярные товары</h2>
+    <div class="products-grid">
+        {% for p in popular %}
+        <div class="product-card">
+            <h3><a href="/product/{{ p.id }}">{{ p.name }}</a></h3>
+            <p class="description">{{ p.description[:80] }}...</p>
+            <p class="category-tag">{{ p.category_name }}</p>
+            <div class="price">
+                {% if p.old_price %}
+                <span class="old-price">{{ "%.0f"|format(p.old_price) }} ₽</span>
+                {% endif %}
+                <span class="current-price">{{ "%.0f"|format(p.price) }} ₽</span>
+            </div>
+            <div class="rating">⭐ {{ p.rating }} ({{ p.reviews_count }})</div>
+            <div class="stock">На складе: {{ p.stock }} шт.</div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

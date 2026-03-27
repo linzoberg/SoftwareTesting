@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Оформление заказа{% endblock %}
+{% block content %}
+<h1>Оформление заказа</h1>
+<div class="checkout-layout">
+    <div class="checkout-form">
+        <form method="post" action="/checkout">
+            <h3>Доставка</h3>
+            <label>Адрес доставки
+                <textarea name="address" required rows="3" placeholder="Город, улица, дом, квартира"></textarea>
+            </label>
+            <h3>Оплата</h3>
+            <label>
+                <input type="radio" name="payment_method" value="card" checked> Банковская карта
+            </label>
+            <label>
+                <input type="radio" name="payment_method" value="cash"> Наличные при получении
+            </label>
+            <button type="submit" class="btn-primary big">Подтвердить заказ на {{ "%.0f"|format(total) }} ₽</button>
+        </form>
+    </div>
+    <div class="order-summary">
+        <h3>Ваш заказ</h3>
+        {% for item in items %}
+        <div class="summary-item">
+            <span>{{ item.name }} × {{ item.quantity }}</span>
+            <span>{{ "%.0f"|format(item.subtotal) }} ₽</span>
+        </div>
+        {% endfor %}
+        <div class="summary-total">
+            <strong>Итого: {{ "%.0f"|format(total) }} ₽</strong>
+        </div>
+    </div>
+</div>
+{% endblock %}

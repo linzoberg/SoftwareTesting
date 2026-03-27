@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Каталог{% if current_category %} — {{ current_category.name }}{% endif %}{% endblock %}
+{% block content %}
+<h1>Каталог{% if current_category %}: {{ current_category.name }}{% endif %}</h1>
+
+<div class="catalog-layout">
+    <aside class="sidebar">
+        <h3>Категории</h3>
+        <ul>
+            <li><a href="/catalog" class="{{ 'active' if not current_category }}">Все товары</a></li>
+            {% for cat in categories %}
+            <li>
+                <a href="/catalog/{{ cat.id }}"
+                   class="{{ 'active' if current_category and current_category.id == cat.id }}">
+                    {{ cat.name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <h3>Сортировка</h3>
+        <ul>
+            <li><a href="?sort=name&order=asc">По названию (А-Я)</a></li>
+            <li><a href="?sort=price&order=asc">По цене ↑</a></li>
+            <li><a href="?sort=price&order=desc">По цене ↓</a></li>
+            <li><a href="?sort=rating&order=desc">По рейтингу</a></li>
+        </ul>
+    </aside>
+
+    <div class="catalog-content">
+        <div class="products-grid">
+            {% for p in products %}
+            <div class="product-card">
+                <h3><a href="/product/{{ p.id }}">{{ p.name }}</a></h3>
+                <p class="description">{{ p.description[:60] }}...</p>
+                <p class="category-tag">{{ p.category_name }}</p>
+                <div class="price">
+                    {% if p.old_price %}
+                    <span class="old-price">{{ "%.0f"|format(p.old_price) }} ₽</span>
+                    {% endif %}
+                    <span class="current-price">{{ "%.0f"|format(p.price) }} ₽</span>
+                </div>
+                <div class="rating">⭐ {{ p.rating }}</div>
+                <form method="post" action="/cart/add">
+                    <input type="hidden" name="product_id" value="{{ p.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="btn-cart">В корзину</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% for p in range(1, total_pages + 1) %}
+            <a href="?page={{ p }}&sort={{ sort }}&order={{ order }}"
+               class="{{ 'active' if p == page }}">{{ p }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

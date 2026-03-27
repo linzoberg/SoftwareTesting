@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TechShop{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">🛒 TechShop</a>
+            <nav>
+                <a href="/">Главная</a>
+                <a href="/catalog">Каталог</a>
+                <form class="search-form" action="/search" method="get">
+                    <input type="text" name="q" placeholder="Поиск товаров..."
+                           value="{{ request.args.get('q', '') }}">
+                    <button type="submit">🔍</button>
+                </form>
+                {% if session.get('username') %}
+                    <a href="/cart">🛒 Корзина</a>
+                    <span class="user-info">👤 {{ session['username'] }}</span>
+                    <a href="/logout" class="btn-small">Выйти</a>
+                {% else %}
+                    <a href="/login">Войти</a>
+                    <a href="/register" class="btn-small">Регистрация</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2025 TechShop — Интернет-магазин электроники. Лабораторная работа №5.</p>
+    </footer>
+</body>
+</html>

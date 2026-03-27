@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Заказ оформлен{% endblock %}
+{% block content %}
+<div class="success-page">
+    <h1>✅ Заказ #{{ order_id }} успешно оформлен!</h1>
+    <p>Сумма заказа: <strong>{{ "%.0f"|format(total) }} ₽</strong></p>
+    <p>Спасибо за покупку!</p>
+    <a href="/catalog" class="btn-primary">Вернуться в каталог</a>
+</div>
+{% endblock %}

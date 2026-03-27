@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Поиск: {{ query }}{% endblock %}
+{% block content %}
+<h1>Результаты поиска: "{{ query }}"</h1>
+{% if products %}
+<p>Найдено товаров: {{ products|length }}</p>
+<div class="products-grid">
+    {% for p in products %}
+    <div class="product-card">
+        <h3><a href="/product/{{ p.id }}">{{ p.name }}</a></h3>
+        <p class="description">{{ p.description[:80] }}...</p>
+        <p class="category-tag">{{ p.category_name }}</p>
+        <span class="current-price">{{ "%.0f"|format(p.price) }} ₽</span>
+        <div class="rating">⭐ {{ p.rating }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% elif query %}
+<p>По запросу "{{ query }}" ничего не найдено.</p>
+{% else %}
+<p>Введите запрос для поиска.</p>
+{% endif %}
+{% endblock %}

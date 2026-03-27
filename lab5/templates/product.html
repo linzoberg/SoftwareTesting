@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<div class="product-detail">
+    <div class="product-info">
+        <p class="breadcrumb">
+            <a href="/catalog">Каталог</a> →
+            <a href="/catalog/{{ product.category_id }}">{{ product.category_name }}</a> →
+            {{ product.name }}
+        </p>
+        <h1>{{ product.name }}</h1>
+        <p class="description">{{ product.description }}</p>
+        <div class="price-block">
+            {% if product.old_price %}
+            <span class="old-price">{{ "%.0f"|format(product.old_price) }} ₽</span>
+            {% endif %}
+            <span class="current-price big">{{ "%.0f"|format(product.price) }} ₽</span>
+        </div>
+        <div class="rating">⭐ {{ product.rating }} ({{ product.reviews_count }} отзывов)</div>
+        <div class="stock {% if product.stock < 10 %}low{% endif %}">
+            На складе: {{ product.stock }} шт.
+        </div>
+
+        <form method="post" action="/cart/add" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <label>Количество:
+                <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}">
+            </label>
+            <button type="submit" class="btn-cart big">🛒 Добавить в корзину</button>
+        </form>
+    </div>
+</div>
+
+<section>
+    <h2>Отзывы</h2>
+    {% if session.get('user_id') %}
+    <form method="post" action="/review/add" class="review-form">
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        <label>Оценка:
+            <select name="rating">
+                <option value="5">⭐⭐⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="1">⭐</option>
+            </select>
+        </label>
+        <textarea name="text" placeholder="Ваш отзыв..." rows="3"></textarea>
+        <button type="submit" class="btn-small">Оставить отзыв</button>
+    </form>
+    {% endif %}
+
+    {% for r in reviews %}
+    <div class="review">
+        <strong>{{ r.username }}</strong> — ⭐ {{ r.rating }}
+        <p>{{ r.text }}</p>
+        <small>{{ r.created_at }}</small>
+    </div>
+    {% endfor %}
+    {% if not reviews %}
+    <p>Отзывов пока нет. Будьте первым!</p>
+    {% endif %}
+</section>
+
+{% if similar %}
+<section>
+    <h2>Похожие товары</h2>
+    <div class="products-grid">
+        {% for p in similar %}
+        <div class="product-card">
+            <h3><a href="/product/{{ p.id }}">{{ p.name }}</a></h3>
+            <span class="current-price">{{ "%.0f"|format(p.price) }} ₽</span>
+            <div class="rating">⭐ {{ p.rating }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}
