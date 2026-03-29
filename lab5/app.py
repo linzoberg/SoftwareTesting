@@ -1,10 +1,7 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash
 import sqlite3
 import hashlib
-import random
-import string
-from datetime import datetime
-from functools import wraps
+
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key_for_testing_2025'
