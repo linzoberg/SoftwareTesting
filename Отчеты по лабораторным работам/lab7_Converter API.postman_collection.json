@@ -1,0 +1,1461 @@
+{
+  "info": {
+    "_postman_id": "58d1b55e-6d11-41e7-9099-2c0ce03edc75",
+    "name": "Converter API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53590594",
+    "_collection_link": "https://go.postman.co/collection/53590594-58d1b55e-6d11-41e7-9099-2c0ce03edc75?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Позитивные тесты",
+      "item": [
+        {
+          "name": "Запрос 01. Проверка работоспособности сервера",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-1: Проверка доступности сервера\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Поле status равно ok\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.status).to.eql(\"ok\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Время ответа менее 2000 мс\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/health",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 02. Получение курса USD → EUR",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-2: Получение курса обмена (пара USD/EUR)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Ответ в формате JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Поле success равно true\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.success).to.eql(true);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Rate является числом в диапазоне 0.5 - 1.5\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.rate).to.be.a(\"number\");\r",
+                  "    pm.expect(jsonData.rate).to.be.above(0.5);\r",
+                  "    pm.expect(jsonData.rate).to.be.below(1.5);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Коды валют соответствуют запросу\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.from).to.eql(\"USD\");\r",
+                  "    pm.expect(jsonData.to).to.eql(\"EUR\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/rate?from=USD&to=EUR",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "rate"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "USD"
+                },
+                {
+                  "key": "to",
+                  "value": "EUR"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 03. Получение курса USD → RUB",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-2: Получение курса обмена (пара USD/RUB)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Курс USD/RUB в диапазоне 50 - 200\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.rate).to.be.above(50);\r",
+                  "    pm.expect(jsonData.rate).to.be.below(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/rate?from=USD&to=RUB",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "rate"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "USD"
+                },
+                {
+                  "key": "to",
+                  "value": "RUB"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 04. Конвертация 100 USD → EUR",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-3: Конвертация суммы (целое число, POST-запрос)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Ответ содержит все обязательные поля\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property(\"success\");\r",
+                  "    pm.expect(jsonData).to.have.property(\"from\");\r",
+                  "    pm.expect(jsonData).to.have.property(\"to\");\r",
+                  "    pm.expect(jsonData).to.have.property(\"amount\");\r",
+                  "    pm.expect(jsonData).to.have.property(\"rate\");\r",
+                  "    pm.expect(jsonData).to.have.property(\"result\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Результат является положительным числом\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.result).to.be.a(\"number\");\r",
+                  "    pm.expect(jsonData.result).to.be.above(0);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Результат равен amount * rate\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    var expected = Math.round(jsonData.amount * jsonData.rate * 100) / 100;\r",
+                  "    pm.expect(jsonData.result).to.eql(expected);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"USD\",\r\n    \"to\": \"EUR\",\r\n    \"amount\": 100\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 05. Конвертация дробной суммы 33.33 USD → RUB",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-3: Конвертация суммы (дробное число, округление)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Результат округлён до 2 знаков\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    var resultStr = jsonData.result.toString();\r",
+                  "    var parts = resultStr.split(\".\");\r",
+                  "    if (parts.length === 2) {\r",
+                  "        pm.expect(parts[1].length).to.be.at.most(2);\r",
+                  "    }\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Результат совпадает с amount * rate\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    var expected = Math.round(jsonData.amount * jsonData.rate * 100) / 100;\r",
+                  "    pm.expect(jsonData.result).to.eql(expected);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"USD\",\r\n    \"to\": \"RUB\",\r\n    \"amount\": 33.33\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 06. Конвертация валюты в саму себя (USD → USD)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-4: Граничное значение — конвертация в ту же валюту\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Курс равен 1\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.rate).to.eql(1);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Результат равен исходной сумме\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.result).to.eql(jsonData.amount);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"USD\",\r\n    \"to\": \"USD\",\r\n    \"amount\": 250\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 07. Конвертация нулевой суммы",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-4: Граничное значение — нулевая сумма\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Результат равен 0\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.result).to.eql(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"USD\",\r\n    \"to\": \"EUR\",\r\n    \"amount\": 0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 08. Коды валют в нижнем регистре",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-5: Нормализация ввода — нижний регистр\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Коды приведены к верхнему регистру\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.from).to.eql(\"USD\");\r",
+                  "    pm.expect(jsonData.to).to.eql(\"EUR\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Результат корректен\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.result).to.be.above(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"usd\",\r\n    \"to\": \"eur\",\r\n    \"amount\": 100\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert?from=usd&to=eur&amount=100",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "usd"
+                },
+                {
+                  "key": "to",
+                  "value": "eur"
+                },
+                {
+                  "key": "amount",
+                  "value": "100"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 09. Получение списка доступных валют",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-8: Получение списка валют\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Currencies является массивом с > 50 элементами\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.currencies).to.be.an(\"array\");\r",
+                  "    pm.expect(jsonData.count).to.be.above(50);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Содержит USD, EUR, RUB\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.currencies).to.include(\"USD\");\r",
+                  "    pm.expect(jsonData.currencies).to.include(\"EUR\");\r",
+                  "    pm.expect(jsonData.currencies).to.include(\"RUB\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Count соответствует длине массива\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.count).to.eql(jsonData.currencies.length);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/currencies",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "currencies"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 10a. Добавить пару USD/EUR в избранное",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-9: Добавление валютной пары в избранное (POST)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 201 (создано)\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Ответ содержит данные созданной пары\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.success).to.eql(true);\r",
+                  "    pm.expect(jsonData.favorite).to.have.property(\"id\");\r",
+                  "    pm.expect(jsonData.favorite.from).to.eql(\"USD\");\r",
+                  "    pm.expect(jsonData.favorite.to).to.eql(\"EUR\");\r",
+                  "});\r",
+                  "\r",
+                  "// Сохраняем id для последующего DELETE-запроса\r",
+                  "var jsonData = pm.response.json();\r",
+                  "pm.collectionVariables.set(\"favorite_id\", jsonData.favorite.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"USD\",\r\n    \"to\": \"EUR\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/favorites",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "favorites"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 10b. Получить список избранного",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-9: Получение списка избранных пар (GET)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Список избранного не пуст\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.count).to.be.above(0);\r",
+                  "    pm.expect(jsonData.favorites).to.be.an(\"array\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Добавленная пара присутствует в списке\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    var found = jsonData.favorites.some(function(pair) {\r",
+                  "        return pair.from === \"USD\" && pair.to === \"EUR\";\r",
+                  "    });\r",
+                  "    pm.expect(found).to.be.true;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/favorites",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "favorites"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 10c. Удалить пару из избранного",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-9: Удаление валютной пары из избранного (DELETE)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Ответ подтверждает удаление\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.success).to.eql(true);\r",
+                  "    pm.expect(jsonData.message).to.include(\"удалена\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/favorites/{{favorite_id}}",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "favorites",
+                "{{favorite_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 11. Полное обновление настроек",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-10: Полное обновление настроек (PUT)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Настройки обновлены корректно\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.settings.decimal_places).to.eql(4);\r",
+                  "    pm.expect(jsonData.settings.default_base).to.eql(\"EUR\");\r",
+                  "    pm.expect(jsonData.settings.timeout).to.eql(15);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сообщение подтверждает обновление\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.include(\"обновлены\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"decimal_places\": 4,\r\n    \"default_base\": \"EUR\",\r\n    \"timeout\": 15\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/settings",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "settings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 12. Частичное обновление настроек",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-11: Частичное обновление настроек (PATCH)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Обновлённое поле изменилось\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.settings.timeout).to.eql(30);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Остальные поля не изменились\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    // decimal_places остался 4 (установлен предыдущим PUT)\r",
+                  "    pm.expect(jsonData.settings.decimal_places).to.eql(4);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сообщение подтверждает частичное обновление\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.include(\"частично\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"timeout\": 30\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/settings",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "settings"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Негативные тесты",
+      "item": [
+        {
+          "name": "Запрос 13. Запрос курса без параметров",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-6: Валидация — отсутствие обязательных параметров (GET)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сообщение указывает на обязательность параметров\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property(\"error\");\r",
+                  "    pm.expect(jsonData.error).to.include(\"обязательны\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/rate",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "rate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 14. Конвертация без тела запроса",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-6: Валидация — отсутствие JSON-тела (POST)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сообщение указывает на необходимость JSON\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.error).to.include(\"JSON\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 15. Строка вместо суммы",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-7: Валидация — нечисловая сумма\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сообщение указывает на ошибку типа\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.error).to.include(\"числом\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"USD\",\r\n    \"to\": \"EUR\",\r\n    \"amount\": \"abc\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 16. Отрицательная сумма",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-7: Валидация — отрицательная сумма\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 422\", function () {\r",
+                  "    pm.response.to.have.status(422);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сообщение указывает на недопустимость\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.error).to.include(\"отрицательной\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"USD\",\r\n    \"to\": \"EUR\",\r\n    \"amount\": -100\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 17. Несуществующая валюта",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-7: Валидация — несуществующий код валюты\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 422\", function () {\r",
+                  "    pm.response.to.have.status(422);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сообщение указывает на отсутствие валюты\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.error).to.include(\"не найдена\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"USD\",\r\n    \"to\": \"XYZ\",\r\n    \"amount\": 100\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 18. Удаление несуществующей пары",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-9: Удаление несуществующего ресурса (DELETE)\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 404\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сообщение указывает что пара не найдена\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.error).to.include(\"не найдена\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/favorites/9999",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "favorites",
+                "9999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 19. Обновление настроек без обязательного поля",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-10: PUT требует все поля — неполный набор\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сообщение указывает на необходимость всех полей\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.error).to.include(\"все поля\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"decimal_places\": 2,\r\n    \"default_base\": \"USD\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/settings",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "settings"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Граничные тесты",
+      "item": [
+        {
+          "name": "Запрос 20. Очень большая сумма",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-4: Граничное значение — большая сумма\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сервер обрабатывает большую сумму\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.result).to.be.a(\"number\");\r",
+                  "    pm.expect(jsonData.result).to.be.above(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"USD\",\r\n    \"to\": \"EUR\",\r\n    \"amount\": 999999999\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 21. Минимальная сумма 0.01",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-4: Граничное значение — минимальная сумма\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Результат больше 0\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.result).to.be.above(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"USD\",\r\n    \"to\": \"RUB\",\r\n    \"amount\": 0.01\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/convert",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "convert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 22a. Добавить пару GBP/JPY в избранное",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-9: Добавление пары — создание или подтверждение существования\r",
+                  "\r",
+                  "var status = pm.response.code;\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 201 (создано) или 409 (уже существует)\", function () {\r",
+                  "    pm.expect(status).to.be.oneOf([201, 409]);\r",
+                  "});\r",
+                  "\r",
+                  "if (status === 201) {\r",
+                  "    pm.test(\"Пара GBP/JPY успешно создана\", function () {\r",
+                  "        var jsonData = pm.response.json();\r",
+                  "        pm.expect(jsonData.success).to.eql(true);\r",
+                  "        pm.expect(jsonData.favorite.from).to.eql(\"GBP\");\r",
+                  "        pm.expect(jsonData.favorite.to).to.eql(\"JPY\");\r",
+                  "    });\r",
+                  "}\r",
+                  "\r",
+                  "if (status === 409) {\r",
+                  "    pm.test(\"Пара GBP/JPY уже существует (от предыдущего запуска)\", function () {\r",
+                  "        var jsonData = pm.response.json();\r",
+                  "        pm.expect(jsonData.error).to.include(\"уже в избранном\");\r",
+                  "    });\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"GBP\",\r\n    \"to\": \"JPY\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/favorites",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "favorites"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Запрос 22b. Попытка добавить дубликат GBP/JPY",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ФП-9: Повторное добавление той же пары — должен быть конфликт\r",
+                  "\r",
+                  "pm.test(\"Статус-код равен 409 (конфликт)\", function () {\r",
+                  "    pm.response.to.have.status(409);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Сообщение указывает на дубликат\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property(\"error\");\r",
+                  "    pm.expect(jsonData.error).to.include(\"уже в избранном\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"from\": \"GBP\",\r\n    \"to\": \"JPY\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/api/favorites",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "favorites"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "favorite_id",
+      "value": ""
+    }
+  ]
+}
